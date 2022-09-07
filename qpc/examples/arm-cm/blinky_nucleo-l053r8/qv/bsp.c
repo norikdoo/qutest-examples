@@ -37,7 +37,7 @@ QSTimeCtr QS_tickPeriod_;
 static QSpyId const l_SysTick_Handler = { 0U };
 
 enum AppRecords { /* application-specific trace records */
-     BLINK_STAT = QS_USER
+    LED = QS_USER
 };
 #endif
 
@@ -87,8 +87,10 @@ void BSP_init(void) {
     if (QS_INIT((void *)0) == 0U) {
         Q_ERROR();
     }
+
+    QS_FUN_DICTIONARY(&QHsm_top);
     QS_OBJ_DICTIONARY(&l_SysTick_Handler);
-    QS_USR_DICTIONARY(BLINK_STAT);
+    QS_USR_DICTIONARY(LED);
 
     /* setup the QS filters... */
     QS_GLB_FILTER(QS_SM_RECORDS);
@@ -98,15 +100,17 @@ void BSP_init(void) {
 
 void BSP_ledOn(void) {
     GPIOA->BSRR |= (LED_LD2);        /* turn LED2 on  */
-    QS_BEGIN_ID(BLINK_STAT, 0U) /* app-specific record */
-        QS_STR("  ON");                 /* Status */
+
+    QS_BEGIN_ID(LED, AO_Blinky->prio) /* app-specific record */
+        QS_STR("ON");                 /* Status */
     QS_END()
 }
 /*..........................................................................*/
 void BSP_ledOff(void) {
     GPIOA->BSRR |= (LED_LD2 << 16);  /* turn LED2 off */
-    QS_BEGIN_ID(BLINK_STAT, 0U) /* app-specific record */
-        QS_STR("  OFF");                 /* Status */
+
+    QS_BEGIN_ID(LED, AO_Blinky->prio) /* app-specific record */
+        QS_STR("OFF");                 /* Status */
     QS_END()
 }
 

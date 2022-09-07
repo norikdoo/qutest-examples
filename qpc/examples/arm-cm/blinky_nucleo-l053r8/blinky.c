@@ -51,7 +51,7 @@ QActive * const AO_Blinky = &l_blinky.super;
 /*.$define${AOs::Blinky_ctor} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 /*.${AOs::Blinky_ctor} .....................................................*/
 void Blinky_ctor(void) {
-    Blinky *me = (Blinky *)AO_Blinky;
+    Blinky *me = &l_blinky;
     QActive_ctor(&me->super, Q_STATE_CAST(&Blinky_initial));
     QTimeEvt_ctorX(&me->timeEvt, &me->super, TIMEOUT_SIG, 0U);
 }
@@ -62,12 +62,21 @@ void Blinky_ctor(void) {
 static QState Blinky_initial(Blinky * const me, void const * const par) {
     /*.${AOs::Blinky::SM::initial} */
     (void)par; /* unused parameter */
+
+    QS_OBJ_DICTIONARY(&l_blinky);
+    QS_OBJ_DICTIONARY(&l_blinky.timeEvt);
+    QS_SIG_DICTIONARY(TIMEOUT_SIG, (void *)0);
+
     /* arm the private time event to expire in 1/2s
     * and periodically every 1/2 second
     */
     QTimeEvt_armX(&me->timeEvt,
         BSP_TICKS_PER_SEC/2,
         BSP_TICKS_PER_SEC/2);
+
+    QS_FUN_DICTIONARY(&Blinky_off);
+    QS_FUN_DICTIONARY(&Blinky_on);
+
     return Q_TRAN(&Blinky_off);
 }
 /*.${AOs::Blinky::SM::off} .................................................*/
