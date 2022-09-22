@@ -2,7 +2,7 @@
 #include "skeleton.h"
 #include "qpc.h"
 
-Q_DEFINE_THIS_FILE
+Q_DEFINE_THIS_MODULE("SKELETON")
 
 /* Public variables to demonstrate poke() */
 int skeleton_value = 0;
