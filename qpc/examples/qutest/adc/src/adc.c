@@ -5,11 +5,11 @@
 
 Q_DEFINE_THIS_MODULE("ADC")
 
+#ifdef Q_SPY
 enum {
    ADC = QS_USER
 };
 
-#ifdef Q_SPY
 static int raw_value[ADC_CHANNEL_COUNT];
 #endif
 
