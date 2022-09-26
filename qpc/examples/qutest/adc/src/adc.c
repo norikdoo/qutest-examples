@@ -38,6 +38,14 @@ int ADC_init()
     }
 #endif
 
+    /* Insert test probe */
+    QS_TEST_PROBE_DEF(&ADC_init)
+
+    /* tweak returned value with probe() */
+    QS_TEST_PROBE(
+        ret = (int)qs_tp_;
+    )
+
     /* Trace */
     QS_BEGIN(ADC, 0)
         QS_FUN(&ADC_init);

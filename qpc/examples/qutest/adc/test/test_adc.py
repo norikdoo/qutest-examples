@@ -23,7 +23,7 @@ expect("@timestamp Trg-Done QS_RX_COMMAND")
 
 test("Test ASSERT -> ADC channel out-of-range", NORESET)
 command(1, 2)
-expect("@timestamp =ASSERT= Mod=ADC,Loc=54")
+expect("@timestamp =ASSERT= Mod=ADC,Loc=62")
 
 # Target was reset due to ASSERT
 test("Read ADC channel 0 after RESET (default value of 255)")
@@ -34,4 +34,12 @@ expect("@timestamp Trg-Done QS_RX_COMMAND")
 test("Read ADC channel 1 after RESET (default value of 255)", NORESET)
 command(1, 1)
 expect("@timestamp ADC ADC_read 1 255")
+expect("@timestamp Trg-Done QS_RX_COMMAND")
+
+# Demo of probe()
+test("Demo of probe() with ADC_init return value")
+probe('ADC_init', 99)
+command(0)
+expect("@timestamp TstProbe Fun=ADC_init,Data=99")
+expect("@timestamp ADC ADC_init 99")
 expect("@timestamp Trg-Done QS_RX_COMMAND")
